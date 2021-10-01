@@ -57,6 +57,7 @@ function ForgotPageForm(props) {
                 type="text"
                 name="phone"
                 id="phone"
+                style={{marginBottom:"10px"}}
                 placeholder="Phone Number"
                 className="loginform_input"
                 {...register("PhoneNumber", {
@@ -67,7 +68,7 @@ function ForgotPageForm(props) {
                 })}
               />
               {console.log(errors)}
-              <span className="error_msg">{errors.PhoneNumber?.message}</span>
+              <span style={{marginTop:"5px"}} className="error_msg">{errors.PhoneNumber?.message}</span>
             </div>
 
             <div className="login_form_fields_extra">
@@ -85,7 +86,7 @@ function ForgotPageForm(props) {
               <input
                 type="submit"
                 className="loginform_input_btn common_flex"
-                value="Login"
+                value="Submit"
               />
             </div>
           </form>

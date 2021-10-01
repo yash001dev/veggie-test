@@ -12,6 +12,9 @@ import {
   USER_REGISTRATION_VERIFICATION_AGAIN_SUCCESSFUL,
   USER_REGISTRATION_VERIFICATION_AGAIN_ERROR,
   USER_LOGOUT,
+  USER_FORGOT_PASS_LOADING,
+  USER_FORGOT_PASS_SUCCESSFUL,
+  USER_FORGOT_PASS_ERROR,
 } from "../constants/userConstants";
 import axios from "axios";
 import { CART_EMPTY } from "../constants/cartConstants";
@@ -170,6 +173,37 @@ export const againOtp = (tempToken, history) => {
       });
     }
   };
+};
+
+export const forgotpass = (mobileNumber, history) => async (dispatch) => {
+  dispatch({ type: USER_FORGOT_PASS_LOADING });
+  try {
+    const { data } = await axios.post(
+      "https://admin.veggi365.com/api/user/forgotpassword",
+      {
+        phone: mobileNumber,
+      }
+    );
+    if (data.status === "success") {
+      history.push({
+        pathname: "/verify-otp",
+        state: {
+          otpToken: data?.otptoken,
+          tempToken: data?.temptoken,
+        },
+      });
+    } else {
+      dispatch({
+        type: USER_FORGOT_PASS_ERROR,
+        payload: "invalid otp",
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: USER_FORGOT_PASS_ERROR,
+      payload: "invalid otp",
+    });
+  }
 };
 
 export const otpVerification = (otp, otptoken) => async (dispatch) => {
