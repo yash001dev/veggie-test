@@ -26,6 +26,7 @@ export const userLogin = (phone, password, history) => async (dispatch) => {
       phone: phone,
       password: password,
     });
+    const { data: requiredInfo } = res;
 
     if (res.data.varification === false) {
       history.push({
@@ -44,9 +45,7 @@ export const userLogin = (phone, password, history) => async (dispatch) => {
       baseURL: "https://admin.veggi365.com/api",
       headers: {
         // Authorization: `Bearer ${token}`,
-        Authorization: `Bearer ${JSON.parse(
-          localStorage.getItem("userToken")
-        )} `,
+        Authorization: `Bearer ${requiredInfo.token} `,
       },
     });
 
