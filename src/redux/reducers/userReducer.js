@@ -15,6 +15,12 @@ import {
   USER_REGISTRATION_VERIFICATION_AGAIN_SUCCESSFUL,
   USER_REGISTRATION_VERIFICATION_AGAIN_ERROR,
   USER_UPDATE_ERROR,
+  USER_FORGOT_PASS_LOADING,
+  USER_FORGOT_PASS_SUCCESSFUL,
+  USER_FORGOT_PASS_ERROR,
+  USER_RESET_PASS_LOADING,
+  USER_RESET_PASS_SUCCESSFUL,
+  USER_RESET_PASS_ERROR,
 } from "../constants/userConstants";
 
 import produce from "immer";
@@ -163,6 +169,56 @@ export const userUpdateReducer = produce((state = initialState, action) => {
     }
 
     case USER_UPDATE_ERROR: {
+      state.loading = false;
+      state.error = action.payload;
+      return;
+    }
+
+    default: {
+      return state;
+    }
+  }
+});
+
+export const userForgotPass = produce((state = initialState, action) => {
+  switch (action.type) {
+    case USER_FORGOT_PASS_LOADING: {
+      state.loading = true;
+      return;
+    }
+
+    case USER_FORGOT_PASS_SUCCESSFUL: {
+      state.loading = false;
+      state.user = action.payload;
+      return;
+    }
+
+    case USER_FORGOT_PASS_ERROR: {
+      state.loading = false;
+      state.error = action.payload;
+      return;
+    }
+
+    default: {
+      return state;
+    }
+  }
+});
+
+export const userResetPass = produce((state = initialState, action) => {
+  switch (action.type) {
+    case USER_RESET_PASS_LOADING: {
+      state.loading = true;
+      return;
+    }
+
+    case USER_RESET_PASS_SUCCESSFUL: {
+      state.loading = false;
+      state.user = action.payload;
+      return;
+    }
+
+    case USER_RESET_PASS_ERROR: {
       state.loading = false;
       state.error = action.payload;
       return;

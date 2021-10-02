@@ -185,6 +185,8 @@ export const forgotpass = (mobileNumber, history) => async (dispatch) => {
       }
     );
     if (data.status === "success") {
+      dispatch({ type: USER_FORGOT_PASS_SUCCESSFUL });
+
       history.push({
         pathname: "/verify-otp",
         state: {
@@ -206,44 +208,77 @@ export const forgotpass = (mobileNumber, history) => async (dispatch) => {
   }
 };
 
-export const otpVerification = (otp, otptoken) => async (dispatch) => {
-  dispatch({ type: USER_REGISTRATION_VERIFICATION_LOADING });
-  try {
-    const {
-      data: { status, token },
-    } = await axios.post("https://admin.veggi365.com/api/user/verifyotp", {
-      otptoken: otptoken,
-      otp: otp,
-    });
-    if (status === "success") {
+export const otpVerification =
+  (otp = "", otptoken, forgotpassword = false, history) =>
+  async (dispatch) => {
+    dispatch({ type: USER_REGISTRATION_VERIFICATION_LOADING });
+    try {
+      if (forgotpassword) {
+        const { data } = await axios.post(
+          "https://admin.veggi365.com/api/user/verifyotp",
+          {
+            otp: otp,
+            otptoken: otptoken,
+          }
+        );
+        if (data.status === "success") {
+          dispatch({
+            type: USER_REGISTRATION_VERIFICATION_SUCCESSFUL,
+            payload: data.status,
+          });
+          history.push({
+            pathname: "/reset-password",
+            state: {
+              tempToken: data?.temptoken,
+            },
+          });
+        } else {
+          dispatch({
+            type: USER_REGISTRATION_VERIFICATION_ERROR,
+            payload: "invalid otp",
+          });
+        }
+        return;
+      }
+
+      const {
+        data: { status, token },
+      } = await axios.post("https://admin.veggi365.com/api/user/verifyotp", {
+        otptoken: otptoken,
+        otp: otp,
+      });
+      if (status === "success") {
+        dispatch({
+          type: USER_REGISTRATION_VERIFICATION_SUCCESSFUL,
+          payload: status,
+        });
+        localStorage.setItem("userToken", JSON.stringify(token));
+
+        const authAxios = axios.create({
+          baseURL: "https://admin.veggi365.com/api",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const { data } = await authAxios.get("/user");
+
+        localStorage.setItem("loggedUser", JSON.stringify(data));
+        localStorage.setItem("userToken", JSON.stringify(token));
+
+        dispatch({
+          type: USER_LOGIN_SUCCESSFUL,
+          payload: JSON.stringify(data),
+        });
+        //dispatch({ type: USER_LOGIN_SUCCESSFUL, payload: data });
+      }
+    } catch (error) {
       dispatch({
-        type: USER_REGISTRATION_VERIFICATION_SUCCESSFUL,
-        payload: status,
+        type: USER_REGISTRATION_VERIFICATION_ERROR,
+        payload: "invalid otp",
       });
-      localStorage.setItem("userToken", JSON.stringify(token));
-
-      const authAxios = axios.create({
-        baseURL: "https://admin.veggi365.com/api",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { data } = await authAxios.get("/user");
-
-      localStorage.setItem("loggedUser", JSON.stringify(data));
-      localStorage.setItem("userToken", JSON.stringify(token));
-
-      dispatch({ type: USER_LOGIN_SUCCESSFUL, payload: JSON.stringify(data) });
-      //dispatch({ type: USER_LOGIN_SUCCESSFUL, payload: data });
     }
-  } catch (error) {
-    dispatch({
-      type: USER_REGISTRATION_VERIFICATION_ERROR,
-      payload: "invalid otp",
-    });
-  }
-};
+  };
 
 export const userUpdate = (old_pass, new_pass) => async (dispatch) => {
   try {

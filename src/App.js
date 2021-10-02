@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoginPage from "./components/LoginPage/LoginPage";
 import ForgotPage from "./components/LoginPage/ForgotPage";
+import ResetPassword from "./components/LoginPage/ResetPassword";
 import SignupPage from "./components/SignupPage/SignupPage";
 import AboutScreen from "./Screens/AboutScreen/AboutScreen";
 import HomeScreen from "./Screens/HomeScreen/HomeScreen";
@@ -91,6 +92,7 @@ function App() {
           <Route path="/forgotpassword" component={ForgotPage} exact />
           <Route path="/aboutus" component={AboutScreen} exact />
           <Route path="/verify-otp" component={SignUpPageOtp} exact />
+          <Route path="/reset-password" component={ResetPassword} exact />
           <Route path="/cart" component={CartScreen} exact />
           <Route path="/payment" component={PaymentScreen} exact />
           <Route path="/product/:pid" component={SoloProduct} exact />
