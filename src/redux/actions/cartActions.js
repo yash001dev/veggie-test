@@ -15,11 +15,11 @@ export const createCartArray = (unit_id_array) => (dispatch) => {
 };
 
 export const addToCart =
-  (product, pid, unit_price, unit_name, unit_id, qty) =>
+  (product, pid, unit_price, unit_name, unit_id, qty, history) =>
   (dispatch, getState) => {
     // const { userReducer: { user }} = getState();
-    
-    if(localStorage.getItem("loggedUser")){
+
+    if (localStorage.getItem("loggedUser")) {
       dispatch({
         type: ADD_TO_CART,
         payload: {
@@ -35,11 +35,9 @@ export const addToCart =
           unit_id: Number(unit_id),
         },
       });
+    } else {
+      console.log(history);
     }
-    else{
-      window.location = "https://veggi365.com/login";  
-    }
-
 
     // setTimeout(() => {
     //   const {

@@ -45,7 +45,7 @@ export const userLogin = (phone, password, history) => async (dispatch) => {
     }
 
     // axios token check
-
+    console.log("REQUIRED INFO:", requiredInfo);
     const authAxios = axios.create({
       baseURL: "https://admin.veggi365.com/api",
       headers: {
@@ -55,10 +55,10 @@ export const userLogin = (phone, password, history) => async (dispatch) => {
     });
 
     const { data } = await authAxios.get("/user");
-
+    console.log("Data:", data);
     localStorage.setItem("loggedUser", JSON.stringify(data));
     // localStorage.setItem("userToken", JSON.stringify(token));
-    localStorage.setItem("userToken", JSON.stringify());
+    localStorage.setItem("userToken", JSON.stringify(requiredInfo.token));
 
     dispatch({ type: USER_LOGIN_SUCCESSFUL, payload: JSON.stringify(data) });
   } catch (error) {
@@ -211,7 +211,7 @@ export const forgotpass = (mobileNumber, history) => async (dispatch) => {
   dispatch({ type: USER_FORGOT_PASS_LOADING });
   try {
     const { data } = await axios.post(
-      "https://admin.veggi365.com/api/user/forgotpassword",
+      "https://admin.veggi365.com/api/user/forgotpass",
       {
         phone: mobileNumber,
       }
@@ -224,6 +224,7 @@ export const forgotpass = (mobileNumber, history) => async (dispatch) => {
         state: {
           otpToken: data?.otptoken,
           tempToken: data?.temptoken,
+          forgotpassword: true,
         },
       });
     } else {
@@ -241,7 +242,7 @@ export const forgotpass = (mobileNumber, history) => async (dispatch) => {
 };
 
 export const otpVerification =
-  (otp = "", otptoken, forgotpassword = false, history) =>
+  (otp = "", otptoken, history, forgotpassword = false) =>
   async (dispatch) => {
     dispatch({ type: USER_REGISTRATION_VERIFICATION_LOADING });
     try {

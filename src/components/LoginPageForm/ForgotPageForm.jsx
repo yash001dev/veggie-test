@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { userLogin } from "../../redux/actions/userActions";
 import LoadingBox from "../../components/LoadingBox";
 import ErrorBox from "../../components/ErrorBox";
 import * as yup from "yup";
 import "./LoginPageForm.css";
+import { forgotpass } from "../../redux/actions/userActions";
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const schema = yup.object().shape({
   PhoneNumber: yup.string().required().matches(phoneRegExp, "Phone number is not valid"),  //yup.string().email().required()  //yup.number().required()
@@ -29,18 +28,13 @@ function ForgotPageForm(props) {
   );
 
   const handleLogin = (data) => {
-    dispatch(userLogin(data.PhoneNumber, data.Password,history));
+    dispatch(forgotpass(data.PhoneNumber,history));
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    if (Object.keys(user).length) {
-      history.push("/");
-    }
-  }, [history, user]);
   return (
     <div className="LoginPageForm_container common_flex">
       <div className="loginform_container">

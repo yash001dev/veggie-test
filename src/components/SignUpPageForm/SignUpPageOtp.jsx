@@ -26,7 +26,11 @@ function SignUpPageOtp(props) {
     // const {loading}=useSelector((state) => state.userVerificationReducer);
 
     const handleOtp=(data='')=>{
-        dispatch(otpVerification(data.OTP,history.location?.state?.otpToken??'',history?.location?.state.tempToken??''));
+        dispatch(otpVerification(
+        data.OTP,
+        history.location?.state?.otpToken??'',
+        history,
+        history.location?.state?.forgotpassword??false));
     };
 
     const handleResend=()=>{

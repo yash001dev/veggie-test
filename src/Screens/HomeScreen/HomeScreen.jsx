@@ -13,7 +13,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
+    console.log("TOKEN:",localStorage.getItem("userToken"));
     const authAxios = axios.create({
       baseURL: "https://admin.veggi365.com/api",
       headers: {

@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/actions/cartActions";
 import LoadingBox from "../../components/LoadingBox";
+import {useHistory} from 'react-router-dom';
 
 function AllProducts() {
   let { catName } = useParams();
@@ -16,6 +17,8 @@ function AllProducts() {
   const [products, setProducts] = useState([]);
   const [productPrice, setProductPrice] = useState([]);
   const [loading, setLoading] = useState(false);
+  let history = useHistory();
+
 
   useEffect(() => {
     const authAxios = axios.create({
@@ -40,7 +43,7 @@ function AllProducts() {
   }, []);
 
   const handleAddToCart = (product, unit_price) => {
-    dispatch(addToCart(product, product.product_id, unit_price, 1)); //if dropdown appears then put dropdown value in place of qty
+    dispatch(addToCart(product, product.product_id, unit_price, 1,history)); //if dropdown appears then put dropdown value in place of qty
   };
 
   var sliceData;

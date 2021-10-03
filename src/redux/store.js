@@ -4,6 +4,8 @@ import {
   userUpdateReducer,
   userVerificationReducer,
   userVerificationReducerAgain,
+  userResetPass,
+  userForgotPass,
 } from "./reducers/userReducer";
 import { addToCartReducer } from "./reducers/cartReducer";
 import { orderReducer } from "./reducers/orderReducer";
@@ -13,11 +15,13 @@ import thunk from "redux-thunk";
 const rootReducer = combineReducers({
   userLoginReducer,
   userRegistrationReducer,
-  userVerificationReducer,
   userUpdateReducer,
   addToCartReducer,
   orderReducer,
+  userVerificationReducer,
   userVerificationReducerAgain,
+  userResetPass,
+  userForgotPass,
 });
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
